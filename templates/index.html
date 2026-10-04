@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 深碗學習</title>
+
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>AI 深碗學習</h1>
+
+        <p class="description">
+            歡迎來到 AI 深碗學習，請選擇你想學習的主題。
+        </p>
+
+        <div class="card">
+
+            <h2>選擇學習主題</h2>
+
+            <div class="topics">
+
+                <label>
+                    <input type="radio" name="topic" value="HTML">
+                    HTML
+                </label>
+
+                <label>
+                    <input type="radio" name="topic" value="CSS">
+                    CSS
+                </label>
+
+                <label>
+                    <input type="radio" name="topic" value="Python">
+                    Python
+                </label>
+
+                <label>
+                    <input type="radio" name="topic" value="Git">
+                    Git
+                </label>
+
+            </div>
+
+            <button class="question-btn" onclick="generateQuestion()">
+                AI 出題
+            </button>
+
+        </div>
+
+
+        <div class="card question-card">
+
+            <h2>AI 題目</h2>
+
+            <p id="question">
+                請先選擇學習主題，再點擊「AI 出題」。
+            </p>
+
+        </div>
+
+
+        <div class="card feedback-card">
+
+            <h2>AI 回饋</h2>
+
+            <p id="feedback">
+                完成題目後，這裡會顯示 AI 的學習回饋。
+            </p>
+
+        </div>
+
+    </div>
+
+<script>
+
+    // 題目資料
+    const questions = {
+
+        HTML: [
+            {
+                question: "HTML 的主要用途是什麼？",
+                feedback: "解題思路：先想 HTML 在網頁中的角色。HTML 就像網頁的骨架，主要負責建立網頁的內容與結構，例如標題、文字、圖片、按鈕等。"
+            },
+
+            {
+                question: "HTML 中哪一個標籤可以建立最大的標題？",
+                feedback: "解題思路：HTML 有 h1 到 h6 六種標題，數字越小代表標題層級越大，所以最大的標題是 h1。"
+            },
+
+            {
+                question: "HTML 中哪一個標籤可以建立段落？",
+                feedback: "解題思路：看到「段落」可以聯想到 paragraph，HTML 使用 p 標籤來建立一般文字段落。"
+            },
+
+            {
+                question: "HTML 中 <body> 的主要用途是什麼？",
+                feedback: "解題思路：先區分 head 和 body。head 放網頁的基本設定，而 body 放使用者最後在網頁上看到的主要內容。"
+            },
+
+            {
+                question: "HTML 中 <title> 會顯示在哪裡？",
+                feedback: "解題思路：title 不會直接顯示在網頁內容中，而是會顯示在瀏覽器的分頁名稱。"
+            },
+
+            {
+                question: "HTML 中 <input> 標籤可以用來做什麼？",
+                feedback: "解題思路：input 是讓使用者輸入或選擇資料的元素，可以透過 type 設定成文字框、單選按鈕或核取方塊等不同形式。"
+            },
+
+            {
+                question: "HTML 中 <button> 標籤的用途是什麼？",
+                feedback: "解題思路：button 就是網頁上的按鈕，使用者點擊後可以執行指定的動作。"
+            },
+
+            {
+                question: "HTML 中 <div> 通常可以用來做什麼？",
+                feedback: "解題思路：可以把 div 想成一個盒子，用來把相關的內容包在一起，方便整理網頁結構，也方便之後使用 CSS 設計外觀。"
+            }
+        ],
+
+
+        CSS: [
+            {
+                question: "CSS 的主要用途是什麼？",
+                feedback: "解題思路：先區分 HTML 和 CSS。HTML 負責內容與結構，而 CSS 負責網頁的外觀與排版，例如顏色、大小、間距和位置。"
+            },
+
+            {
+                question: "CSS 中哪一個屬性可以設定文字顏色？",
+                feedback: "解題思路：看到「文字顏色」就找 color。CSS 使用 color 屬性設定文字的顏色。"
+            },
+
+            {
+                question: "CSS 中哪一個屬性可以設定文字大小？",
+                feedback: "解題思路：看到「文字大小」可以聯想到 font-size，這個屬性就是用來設定文字大小。"
+            },
+
+            {
+                question: "CSS 中哪一個屬性可以設定背景顏色？",
+                feedback: "解題思路：看到「背景顏色」可以聯想到 background-color，它是用來設定元素背景顏色的屬性。"
+            },
+
+            {
+                question: "CSS 中 margin 是用來控制什麼？",
+                feedback: "解題思路：先分辨 margin 和 padding。margin 是外距，也就是控制盒子外面的距離；padding 則是盒子裡面的內距。"
+            },
+
+            {
+                question: "CSS 中 padding 是用來控制什麼？",
+                feedback: "解題思路：padding 是內距，控制元素內容和邊框之間的距離，可以把它想成盒子裡面的空間。"
+            },
+
+            {
+                question: "CSS 中 text-align 可以設定什麼？",
+                feedback: "解題思路：看到 text-align 可以把它拆成 text 和 align，意思就是「文字對齊」，可以設定文字靠左、置中或靠右等方式。"
+            },
+
+            {
+                question: "CSS 中 border-radius 可以用來做什麼？",
+                feedback: "解題思路：看到 border 和 radius，可以理解成邊框的圓角，因此 border-radius 可以用來設定元素的圓角程度。"
+            },
+
+            {
+                question: "CSS 中 display 可以控制什麼？",
+                feedback: "解題思路：display 是控制元素排列與顯示方式的屬性，例如可以搭配 flex 讓元素排列在同一個區域中。"
+            },
+
+            {
+                question: "CSS 中 gap 可以控制什麼？",
+                feedback: "解題思路：gap 可以理解成元素之間的間隔，用來設定同一個排列區域中各元素之間的距離。"
+            }
+        ],
+
+
+        Python: [
+            {
+                question: "Python 中哪一個函式可以用來輸出文字？",
+                feedback: "解題思路：如果題目問「把內容顯示出來」，可以想到 Python 的 print() 函式。"
+            },
+
+            {
+                question: "Python 中哪一個函式可以讓使用者輸入資料？",
+                feedback: "解題思路：如果需要讓使用者在程式執行時輸入資料，可以使用 input() 函式。"
+            },
+
+            {
+                question: "Python 中 if 的主要用途是什麼？",
+                feedback: "解題思路：if 是條件判斷，先檢查條件是否成立，再決定是否執行後面的程式。"
+            },
+
+            {
+                question: "Python 中 else 的用途是什麼？",
+                feedback: "解題思路：先看 if 的條件，如果條件不成立，就可以使用 else 執行另一種情況的程式。"
+            },
+
+            {
+                question: "Python 中 elif 可以用來做什麼？",
+                feedback: "解題思路：當有不只一個條件需要判斷時，可以使用 elif 接著判斷其他條件。"
+            },
+
+            {
+                question: "Python 中變數可以用來做什麼？",
+                feedback: "解題思路：變數可以想成一個可以存放資料的名稱，例如把使用者輸入的姓名或數字先保存起來。"
+            },
+
+            {
+                question: "Python 中 == 和 = 有什麼不同？",
+                feedback: "解題思路：先注意符號數量。= 通常用來指定或設定資料，而 == 是用來比較兩邊的值是否相等。"
+            },
+
+            {
+                question: "Python 中 # 符號通常用來做什麼？",
+                feedback: "解題思路：在 Python 中，# 後面的內容通常是註解，主要用來幫助程式閱讀者了解程式，不會當成一般程式指令執行。"
+            }
+        ],
+
+
+        Git: [
+            {
+                question: "Git 的主要用途是什麼？",
+                feedback: "解題思路：Git 是版本管理工具，可以記錄程式的修改歷程，之後也能回到之前的版本。"
+            },
+
+            {
+                question: "git init 的用途是什麼？",
+                feedback: "解題思路：看到 init 可以聯想到 initialize，也就是初始化。因此 git init 是用來初始化 Git 專案。"
+            },
+
+            {
+                question: "git add . 的用途是什麼？",
+                feedback: "解題思路：Git 的基本流程是 add → commit → push。add 是先把目前的變更加入暫存區，準備建立版本。"
+            },
+
+            {
+                question: "git commit 的用途是什麼？",
+                feedback: "解題思路：commit 可以理解成建立一個版本紀錄，把目前的修改保存成一個 Git 版本。"
+            },
+
+            {
+                question: "git status 可以用來查看什麼？",
+                feedback: "解題思路：status 的意思是「狀態」，所以可以用來查看目前 Git 專案的狀態，例如有哪些檔案發生變更。"
+            },
+
+            {
+                question: "git push 的用途是什麼？",
+                feedback: "解題思路：Git 是本機版本管理，而 GitHub 是線上平台。push 就是把本機的版本送到 GitHub。"
+            },
+
+            {
+                question: "Git 和 GitHub 有什麼不同？",
+                feedback: "解題思路：Git 是本機的版本管理工具，GitHub 則是線上的程式碼平台，可以把 Git 的版本放到雲端，也方便分享與協作。"
+            },
+
+            {
+                question: "GitHub 主要可以用來做什麼？",
+                feedback: "解題思路：可以把 GitHub 想成線上的程式碼平台，可以保存專案、分享程式碼，也能讓多人一起協作。"
+            }
+        ]
+
+    };
+
+
+    // AI 出題
+    function generateQuestion() {
+
+        // 找出選擇的主題
+        let topic = document.querySelector(
+            'input[name="topic"]:checked'
+        );
+
+
+        // 如果沒有選擇主題
+        if (topic == null) {
+
+            document.getElementById("question").innerText =
+                "請先選擇一個學習主題！";
+
+            document.getElementById("feedback").innerText =
+                "解題思路：請先選擇 HTML、CSS、Python 或 Git，再按下 AI 出題。";
+
+            return;
+        }
+
+
+        // 取得主題
+        let selectedTopic = topic.value;
+
+
+        // 取得該主題的題目
+        let topicQuestions = questions[selectedTopic];
+
+
+        // 隨機抽題
+        let randomIndex =
+            Math.floor(Math.random() * topicQuestions.length);
+
+
+        // 取得題目
+        let selectedQuestion =
+            topicQuestions[randomIndex];
+
+
+        // 顯示題目
+        document.getElementById("question").innerText =
+            selectedQuestion.question;
+
+
+        // 顯示解題思路
+        document.getElementById("feedback").innerText =
+            selectedQuestion.feedback;
+
+    }
+
+</script>
+
+</body>
+
+</html>
